@@ -1,0 +1,23 @@
+service: aws-parameters-and-secrets-extension
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "secretsmanager:GetSecretValue"
+      Resource: arn:aws:secretsmanager:us-east-1:425362996713:secret:aj-test-secret-o0a4Xa
+
+functions:
+  hello:
+    handler: handler.hello
+    environment:
+      SECRET_ID: aj-test-secret 
+    events:
+      - httpApi:
+          method: get
+          path: /hello
+    layers:
+      - arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:4
